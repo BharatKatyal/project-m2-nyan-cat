@@ -50,6 +50,7 @@ const addBackground = (root) => {
   // We add it to the root DOM node
   root.append(bg);
 
+
   // We don't want the enemies to go beyond the lower edge of the image
   // so we place a white div to hide the enemies after they reach the bottom.
   // To see what it does, you can comment out all the remaining lines in the function to see the effect.
@@ -64,3 +65,5 @@ const addBackground = (root) => {
   whiteBox.style.background = '#fff';
   root.append(whiteBox);
 };
+
+

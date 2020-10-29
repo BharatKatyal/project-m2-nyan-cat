@@ -15,6 +15,7 @@ class Engine {
     // that contains instances of the Enemy class
     this.enemies = [];
     // We add the background image to the game
+    this.lives = new Text(this.root, 50,50) 
     addBackground(this.root);
   }
 
@@ -26,6 +27,10 @@ class Engine {
     // This code is to see how much time, in milliseconds, has elapsed since the last
     // time this method was called.
     // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
+
+    backgroundSound.play();
+  
+
     if (this.lastFrame === undefined) {
       this.lastFrame = new Date().getTime();
     }
@@ -57,8 +62,46 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert('Game over');
-      return;
+      if(PLAYER_LIVES>0){
+        PLAYER_LIVES = PLAYER_LIVES - 1
+      }else if(PLAYER_LIVES === 0){
+        function restartGame (){
+          window.location.reload();
+        }
+        const restartButton = document.createElement("button")
+        restartButton.style.position ="absolute";
+        restartButton.style.backgroundColor="white"
+        restartButton.style.border ="thick solid #fff"
+        restartButton.style.borderRadius ="25px"
+        restartButton.style.fontSize ="20px"
+        restartButton.style.color="blue"
+        restartButton.style.left= GAME_WIDTH /2
+        restartButton.style.top= GAME_HEIGHT/2
+
+        restartButton.innerHTML="Restart Game"
+        this.root.appendChild(restartButton);
+        restartButton.addEventListener("click",restartGame )
+        return
+      }
+
+      this.lives.update(PLAYER_LIVES)
+      
+
+      
+
+        
+          
+          
+
+
+          // if (message.onclick = function(){
+          //   console.log("bytton was clicked")
+          // }
+      // if(confirm('Game over would you like to play again')){
+      //   console.log("yes")
+      // }else{
+      //   return
+      // }
     }
 
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
@@ -67,7 +110,24 @@ class Engine {
 
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
+ 
+
+
   isPlayerDead = () => {
-    return false;
+let enemyOverlapPlayer = false;
+let playerTop = GAME_HEIGHT - PLAYER_HEIGHT
+this.enemies.forEach(enemy =>{
+  let enemyBottom = enemy.y + ENEMY_HEIGHT
+  if(enemy.hasAlreadyHit === false && enemy.x === this.player.x && enemyBottom  > playerTop){
+    thudSound.play();
+    enemyOverlapPlayer = true
+    enemy.hasAlreadyHit = true
+  
+ 
+  }
+})
+
+return enemyOverlapPlayer
   };
+
 }
